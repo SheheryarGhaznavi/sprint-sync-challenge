@@ -1,10 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+
+from app.services.auth_service import AuthService
 
 router = APIRouter()
 
 
 
 ## User Login Route
-@router.get("/login")
-async def listUsers():
-    return {"message": 'login successful'}
+@router.post("/login")
+async def login(form: OAuth2PasswordRequestForm = Depends(), service: AuthService = Depends(AuthService)):
+    return await service.callFunction("login", {"form": form})
