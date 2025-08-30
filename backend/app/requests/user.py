@@ -3,7 +3,7 @@ import re
 from pydantic import field_validator
 
 
-class UserCreate(SQLModel):
+class UserRequest(SQLModel):
     email: str = Field(max_length=50)
     password: str = Field(min_length=8, max_length=128)
     is_admin: bool = Field(default=False)

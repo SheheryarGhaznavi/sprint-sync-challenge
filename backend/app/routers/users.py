@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from app.services.user_service import UserService
 from app.responses.user import UsersListResponse, UserResponse
-from app.requests.user import UserCreate
+from app.requests.user import UserRequest
 
 router = APIRouter()
 
@@ -17,7 +17,7 @@ async def listUsers( service: UserService = Depends(UserService) ):
 
 ## Create User Route
 @router.post("/", response_model = UserResponse)
-async def createUser( data: UserCreate, service: UserService = Depends(UserService) ):
+async def createUser( data: UserRequest, service: UserService = Depends(UserService) ):
     return await service.callFunction("create", {"user": data})
 
 
@@ -31,8 +31,8 @@ async def getUser( user_id: int, service: UserService = Depends(UserService) ):
 
 ## Update User Route
 @router.put("/{user_id}")
-async def updateUser( user_id: int ):
-    return {"user": {}, "user_id": user_id}
+async def updateUser( user_id: int, data: UserRequest, service: UserService = Depends(UserService) ):
+    return await service.callFunction("update", {"user_id": user_id, "user_data": data})
 
 
 

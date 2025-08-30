@@ -34,3 +34,16 @@ class UserService(BaseService):
     async def getById(self, user_id: int) -> Optional[User]:
         result = await self.session.execute(select(User).where(User.id == user_id))
         return result.scalar_one_or_none()
+    
+
+
+    async def update(self, user_id: int, user_data: User) -> User:
+        user = await self.getById(user_id)
+        if user:
+            user.email = user_data.email
+            user.is_admin = user_data.is_admin
+            user.hashed_password = hashPassword(user_data.password)
+            await self.session.commit()
+            await self.session.refresh(user)
+            print(user)
+        return user
