@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from app.services.user_service import UserService
 
 router = APIRouter()
 
@@ -6,8 +7,8 @@ router = APIRouter()
 
 ## List Users Route
 @router.get("/")
-async def listUsers():
-    return {"users": []}
+async def listUsers( service: UserService = Depends(UserService) ):
+    return await service.list()
 
 
 
