@@ -38,5 +38,5 @@ async def updateUser( user_id: int, data: UserRequest, service: UserService = De
 
 ## Delete User Route
 @router.delete("/{user_id}")
-async def deleteUser( user_id: int ):
-    return {"user": {}, "user_id": user_id}
+async def deleteUser( user_id: int, service: UserService = Depends(UserService) ):
+    return await service.callFunction("delete", {"user_id": user_id})
