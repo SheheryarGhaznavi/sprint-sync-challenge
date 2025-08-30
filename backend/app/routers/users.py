@@ -1,14 +1,16 @@
+from typing import List
 from fastapi import APIRouter, Depends
 from app.services.user_service import UserService
+from app.responses.user import UsersListResponse
 
 router = APIRouter()
 
 
 
 ## List Users Route
-@router.get("/")
+@router.get("/", response_model = UsersListResponse)
 async def listUsers( service: UserService = Depends(UserService) ):
-    return await service.list()
+    return await service.callFunction("list", {"skip": 20, "limit": 10})
 
 
 
