@@ -1,6 +1,15 @@
 from fastapi import FastAPI
+from app.routers import auth, users, tasks
 
 app = FastAPI(title="Sprint Sync API", version="0.1.0")
+
+
+
+# Routers
+app.include_router(auth.router, prefix="/auth", tags=["Authorization"])
+app.include_router(users.router, prefix="/users", tags=["Users"])
+app.include_router(tasks.router, prefix="/tasks", tags=["Tasks"])
+
 
 @app.get("/")
 async def root():
