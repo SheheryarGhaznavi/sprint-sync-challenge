@@ -4,9 +4,10 @@ from sqlmodel import select
 from app.core.database import getDBSession
 from fastapi import Depends
 from app.models.user import User
+from app.services.base_service import BaseService
 
 
-class UserService:
+class UserService(BaseService):
     def __init__(self, session: AsyncSession = Depends(getDBSession)):
         self.session = session
 
