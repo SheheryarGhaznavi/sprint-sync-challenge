@@ -1,7 +1,8 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from app.services.user_service import UserService
-from app.responses.user import UsersListResponse
+from app.responses.user import UsersListResponse, UserResponse
+from app.requests.user import UserCreate
 
 router = APIRouter()
 
@@ -10,14 +11,14 @@ router = APIRouter()
 ## List Users Route
 @router.get("/", response_model = UsersListResponse)
 async def listUsers( service: UserService = Depends(UserService) ):
-    return await service.callFunction("list", {"skip": 20, "limit": 10})
+    return await service.callFunction("list", {"skip": 0, "limit": 10})
 
 
 
 ## Create User Route
-@router.post("/")
-async def createUser():
-    return {"user": {}}
+@router.post("/", response_model = UserResponse)
+async def createUser( data: UserCreate, service: UserService = Depends(UserService) ):
+    return await service.callFunction("create", {"user": data})
 
 
 
