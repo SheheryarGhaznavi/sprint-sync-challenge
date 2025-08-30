@@ -8,10 +8,12 @@ class UserRead(SQLModel):
     is_admin: bool
 
 
+
 class UsersListResponse(SQLModel):
     error: int
     message: str
     data: List[UserRead]
+
 
 
 class UserResponse(SQLModel):

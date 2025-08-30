@@ -23,9 +23,9 @@ async def createUser( data: UserCreate, service: UserService = Depends(UserServi
 
 
 ## Get User Route
-@router.get("/{user_id}")
-async def getUser( user_id: int ):
-    return {"user": {}, "user_id": user_id}
+@router.get("/{user_id}", response_model = UserResponse)
+async def getUser( user_id: int, service: UserService = Depends(UserService) ):
+    return await service.callFunction("getById", {"user_id": user_id})
 
 
 
