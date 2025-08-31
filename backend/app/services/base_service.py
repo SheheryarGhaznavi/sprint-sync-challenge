@@ -19,5 +19,10 @@ class BaseService:
         except Exception as e:
             error = 1
             message = f"Error executing function {function_name}: {e}"
-        
-        return { "error": error, "message": message, "data": data }
+
+        finally:
+
+            if function_name == "login" and error == 0:
+                return data
+
+            return { "error": error, "message": message, "data": data }
