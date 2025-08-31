@@ -32,9 +32,9 @@ async def getTask( task_id: int, service: TaskService = Depends(TaskService), cu
 
 
 ## Update Task Route
-@router.put("/{task_id}")
-async def updateTask( task_id: int ):
-    return {"task": {}, "task_id": task_id}
+@router.put("/{task_id}", response_model = TaskResponse)
+async def updateTask( task_id: int, data: TaskRequest, service: TaskService = Depends(TaskService), current_user: User = Depends(getCurrentUser)  ):
+    return await service.callFunction("update", {"user": current_user, "task_id": task_id, "task_data": data})
 
 
 

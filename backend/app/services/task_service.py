@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
 from app.core.database import getDBSession
 from app.models.task import Task
@@ -52,3 +52,19 @@ class TaskService(BaseService):
         else:
             result = await self.session.execute(select(Task).where(Task.id == task_id).where(Task.user_id == user.id))
         return result.scalar_one_or_none()
+
+
+
+    async def update(self, user: User, task_id: int, task_data: Task) -> Task:
+        task = await self.getById(user, task_id)
+        
+        if not task:
+            raise HTTPException(status_code = 404, detail = "Task not found")
+        
+        task.title = task_data.title
+        task.description = task_data.description
+        task.status = task_data.status
+        task.total_minutes = task_data.total_minutes
+        await self.session.commit()
+        await self.session.refresh(task)
+        return task
