@@ -25,4 +25,4 @@ class BaseService:
             if function_name == "login" and error == 0:
                 return data
 
-            return { "error": error, "message": message, "data": data }
+            return { "error": error, "message": message, "data": data or [] }

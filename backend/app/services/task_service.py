@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 from fastapi import Depends
@@ -42,3 +42,13 @@ class TaskService(BaseService):
         await self.session.commit()
         await self.session.refresh(task)
         return task
+
+
+
+    async def getById(self, user: User, task_id: int) -> Optional[Task]:
+
+        if not user.is_admin:
+            result = await self.session.execute(select(Task).where(Task.id == task_id))
+        else:
+            result = await self.session.execute(select(Task).where(Task.id == task_id).where(Task.user_id == user.id))
+        return result.scalar_one_or_none()
