@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Field
-import re
 from pydantic import field_validator
+import re
 
 
 class UserRequest(SQLModel):

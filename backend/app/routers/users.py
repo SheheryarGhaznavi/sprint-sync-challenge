@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends
+
 from app.services.user_service import UserService
 from app.responses.user import UsersListResponse, UserResponse
 from app.requests.user import UserRequest

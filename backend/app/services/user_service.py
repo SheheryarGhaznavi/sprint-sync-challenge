@@ -1,8 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-from app.core.database import getDBSession
 from fastapi import Depends, HTTPException
+
+from app.core.database import getDBSession
 from app.models.user import User
 from app.services.base_service import BaseService
 from app.utils.security import hashPassword

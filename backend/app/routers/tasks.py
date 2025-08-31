@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.services.task_service import TaskService
 from app.responses.task import TasksListResponse
+from app.requests.task import TaskRequest
 from app.utils.deps import getCurrentUser
 from app.models.user import User
 
@@ -18,8 +19,8 @@ async def listTasks( service: TaskService = Depends(TaskService), current_user: 
 
 ## Create Task Route
 @router.post("/")
-async def createTask():
-    return {"task": {}}
+async def createTask( data: TaskRequest, service: TaskService = Depends(TaskService), current_user: User = Depends(getCurrentUser) ):
+    return await service.callFunction("create", {"user": current_user, "task": data})
 
 
 
