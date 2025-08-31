@@ -7,10 +7,12 @@ app = FastAPI(title="Sprint Sync API", version="0.1.0")
 
 
 
-# Middleware
+# Middlewares
 
 # Structured logging middleware
 registerLogging(app)
+
+
 
 # Routers
 app.include_router(auth.router, prefix="/auth", tags=["Authorization"])
