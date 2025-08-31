@@ -4,7 +4,7 @@ from sqlmodel import SQLModel, Field
 
 
 
-class TaskStatus(str, Enum):
+class TaskStatus(Enum):
     todo = 1
     in_progress = 2
     done = 3

@@ -46,6 +46,6 @@ async def deleteTask( task_id: int, service: TaskService = Depends(TaskService),
 
 
 ## Update Task Status Route
-@router.post("/{task_id}/status")
-async def updateTaskStatus( task_id: int ):
-    return {"task": {}, "task_id": task_id}
+@router.post("/{task_id}/status", response_model = TaskResponse)
+async def updateTaskStatus( task_id: int, status: int, service: TaskService = Depends(TaskService), current_user: User = Depends(getCurrentUser) ):
+    return await service.callFunction("updateStatus", {"user": current_user, "task_id": task_id, "status": status})

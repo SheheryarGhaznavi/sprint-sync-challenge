@@ -4,7 +4,7 @@ from sqlmodel import select
 from fastapi import Depends, HTTPException
 
 from app.core.database import getDBSession
-from app.models.task import Task
+from app.models.task import Task, TaskStatus
 from app.models.user import User
 from app.services.base_service import BaseService
 
@@ -79,3 +79,19 @@ class TaskService(BaseService):
 
         await self.session.delete(task)
         await self.session.commit()
+
+
+
+    async def updateStatus(self, user: User, task_id: int, status: int) -> Task:
+        task = await self.getById(user, task_id)
+
+        if not task:
+            raise HTTPException(status_code = 404, detail = "Task not found")
+        
+        if task.status == TaskStatus.done.value:
+            raise HTTPException(status_code = 400, detail = "Task is already done")
+
+        task.status = status
+        await self.session.commit()
+        await self.session.refresh(task)
+        return task
