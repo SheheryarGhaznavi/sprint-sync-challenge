@@ -1,13 +1,18 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+
+from app.services.task_service import TaskService
+from app.responses.task import TasksListResponse
+from app.utils.deps import getCurrentUser
+from app.models.user import User
 
 router = APIRouter()
 
 
 
 ## List Tasks Route
-@router.get("/")
-async def listTasks():
-    return {"tasks": []}
+@router.get("/", response_model = TasksListResponse)
+async def listTasks( service: TaskService = Depends(TaskService), current_user: User = Depends(getCurrentUser) ):
+    return await service.callFunction("list", {"user": current_user})
 
 
 
