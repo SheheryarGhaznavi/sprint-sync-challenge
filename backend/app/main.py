@@ -1,10 +1,16 @@
 from fastapi import FastAPI
 
 from app.routers import auth, users, tasks, ai
+from app.core.logging import registerLogging
 
 app = FastAPI(title="Sprint Sync API", version="0.1.0")
 
 
+
+# Middleware
+
+# Structured logging middleware
+registerLogging(app)
 
 # Routers
 app.include_router(auth.router, prefix="/auth", tags=["Authorization"])
