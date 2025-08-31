@@ -68,3 +68,14 @@ class TaskService(BaseService):
         await self.session.commit()
         await self.session.refresh(task)
         return task
+
+
+
+    async def delete(self, user: User, task_id: int) -> None:
+        task = await self.getById(user, task_id)
+
+        if not task:
+            raise HTTPException(status_code = 404, detail = "Task not found")
+
+        await self.session.delete(task)
+        await self.session.commit()

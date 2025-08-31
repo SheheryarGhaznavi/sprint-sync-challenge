@@ -39,9 +39,9 @@ async def updateTask( task_id: int, data: TaskRequest, service: TaskService = De
 
 
 ## Delete Task Route
-@router.delete("/{task_id}")
-async def deleteTask( task_id: int ):
-    return {"task": {}, "task_id": task_id}
+@router.delete("/{task_id}", response_model = TaskResponse)
+async def deleteTask( task_id: int, service: TaskService = Depends(TaskService), current_user: User = Depends(getCurrentUser) ):
+    return await service.callFunction("delete", {"user": current_user, "task_id": task_id})
 
 
 
