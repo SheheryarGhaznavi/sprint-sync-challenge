@@ -1,11 +1,21 @@
+import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import 'semantic-ui-css/semantic.min.css'
+import Login from './pages/Login'
 
 function Root() {
-  return (
-    <div>
-      <h1>Hello, React!</h1>
-    </div>
-  )
+
+    const token = localStorage.getItem('token')
+
+    return (
+
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+            </Routes>
+        </BrowserRouter>
+    )
 }
 
 createRoot(document.getElementById('root')).render(<Root />)
