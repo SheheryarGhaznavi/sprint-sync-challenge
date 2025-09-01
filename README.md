@@ -41,7 +41,7 @@ This folder contains the complete backend for the Sprint Sync Challenge project.
 
 ## How to Run
 - Install dependencies: `pip install -r backend/requirements.txt`
-- Run the API: `uvicorn backend/app/main:app --reload`
+- Run the API: `uvicorn app.main:app --reload --app-dir backend`
 - Seed demo data: `python3 backend/app/run_seeder.py`
 - Run migrations: `alembic -c backend/alembic.ini upgrade head`
 
