@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, Menu, Button, Icon, Modal, Form, TextArea, Input, Dropdown, Table, Loader, Message } from 'semantic-ui-react'
 import api from '../services/api'
 
+
 const statusOptions = [
     { key: 'todo', value: 1, text: 'To Do' },
     { key: 'in_progress', value: 2, text: 'In Progress' },
@@ -206,134 +207,164 @@ class App extends Component
         const isValid = form.title && form.title.length <= 120 && (form.description || '').length <= 4000
 
         return (
-            <>
+            <div className="container-fluid">
                 {/* Top navigation bar */}
-                <Menu attached="top" borderless size="large" style={{ boxShadow: '0 2px 8px #eee', background: '#f9f9f9' }}>
-                    <Menu.Item header>
+                <Menu attached="top" borderless size="large" className="row mx-0" style={{ boxShadow: '0 2px 8px #eee', background: 'linear-gradient(90deg, #e3f2fd 0%, #f9f9f9 100%)', borderRadius: 0 }}>
+                    <Menu.Item header className="col-12 col-md-3 d-flex align-items-center" style={{ fontSize: '1.5rem', fontWeight: 700 }}>
                         <Icon name="tasks" color="blue" /> SprintSync
                     </Menu.Item>
-                    <Menu.Item>Welcome <strong>{user?.email}</strong></Menu.Item>
-                    <Menu.Menu position="right">
+                    <Menu.Item className="col-12 col-md-6 d-flex align-items-center justify-content-center" style={{ fontSize: '1rem' }}>Welcome <strong>{user?.email}</strong></Menu.Item>
+                    <Menu.Menu position="right" className="col-12 col-md-3 d-flex justify-content-end">
                         <Menu.Item>
-                            <Button onClick={this.openCreate} primary icon labelPosition="left">
+                            <Button onClick={this.openCreate} primary icon labelPosition="left" style={{ minWidth: 120 }}>
                                 <Icon name="plus" /> New Task
                             </Button>
                         </Menu.Item>
                         <Menu.Item>
-                            <Button onClick={this.logout} color="red">Logout</Button>
+                            <Button onClick={this.logout} color="red" style={{ minWidth: 100 }}>Logout</Button>
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>
 
                 {/* Notification message */}
                 {notification && (
-                    <Container style={{ marginTop: 20 }}>
-                        <Message
-                            positive={notification.type === 'success'}
-                            negative={notification.type === 'error'}
-                            content={notification.message}
-                            onDismiss={() => this.setState({ notification: null })}
-                        />
-                    </Container>
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-md-8">
+                            <Message
+                                positive={notification.type === 'success'}
+                                negative={notification.type === 'error'}
+                                content={notification.message}
+                                onDismiss={() => this.setState({ notification: null })}
+                                style={{ fontSize: '1rem', marginTop: 20 }}
+                            />
+                        </div>
+                    </div>
                 )}
 
                 {/* Loader spinner for API calls */}
                 {loading && (
-                    <Loader active inline="centered" size="large" style={{ marginTop: 40 }}>
-                        Loading...
-                    </Loader>
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-md-8">
+                            <Loader active inline="centered" size="large" style={{ marginTop: 40 }}>
+                                Loading...
+                            </Loader>
+                        </div>
+                    </div>
                 )}
 
-                {/* Main task table */}
-                <Container style={{ marginTop: 20 }}>
-                    <Table compact celled striped color="blue" style={{ borderRadius: 8, boxShadow: '0 2px 12px #eee' }}>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>Title</Table.HeaderCell>
-                                <Table.HeaderCell>Status</Table.HeaderCell>
-                                <Table.HeaderCell>Total Minutes</Table.HeaderCell>
-                                <Table.HeaderCell>Actions</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {/* Iterates over tasks array to render each row */}
-                            {tasks.map(t => (
-                                <Table.Row key={t.id}>
-                                    <Table.Cell>{t.title}</Table.Cell>
-                                    <Table.Cell>
-                                        <Dropdown
-                                            selection
-                                            options={statusOptions}
-                                            value={t.status}
-                                            onChange={(e, { value }) => this.changeStatus(t, value)}
-                                        />
-                                    </Table.Cell>
-                                    <Table.Cell>{t.total_minutes}</Table.Cell>
-                                    <Table.Cell>
-                                        <Button size="small" onClick={() => this.openEdit(t)} color="blue">Edit</Button>
-                                        <Button size="small" negative onClick={() => this.deleteTask(t)}>Delete</Button>
-                                    </Table.Cell>
+                {/* Main task table - responsive and beautiful */}
+                <div className="row justify-content-center">
+                    <div className="col-12 col-md-10">
+                        <Table compact celled striped color="blue" style={{ borderRadius: 12, boxShadow: '0 2px 16px #e3f2fd', overflowX: 'auto', background: '#fff', marginTop: 20 }}>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell style={{ fontSize: '1.1rem', fontWeight: 600 }}>Title</Table.HeaderCell>
+                                    <Table.HeaderCell style={{ fontSize: '1.1rem', fontWeight: 600 }}>Status</Table.HeaderCell>
+                                    <Table.HeaderCell style={{ fontSize: '1.1rem', fontWeight: 600 }}>Total Minutes</Table.HeaderCell>
+                                    <Table.HeaderCell style={{ fontSize: '1.1rem', fontWeight: 600 }}>Actions</Table.HeaderCell>
                                 </Table.Row>
-                            ))}
-                        </Table.Body>
-                    </Table>
-                </Container>
+                            </Table.Header>
+                            <Table.Body>
+                                {/* Iterates over tasks array to render each row */}
+                                {tasks.map(t => (
+                                    <Table.Row key={t.id} style={{ fontSize: '1rem' }}>
+                                        <Table.Cell style={{ wordBreak: 'break-word', maxWidth: 220 }}>{t.title}</Table.Cell>
+                                        <Table.Cell>
+                                            <Dropdown
+                                                selection
+                                                options={statusOptions}
+                                                value={t.status}
+                                                onChange={(e, { value }) => this.changeStatus(t, value)}
+                                                style={{ minWidth: 120 }}
+                                            />
+                                        </Table.Cell>
+                                        <Table.Cell>{t.total_minutes}</Table.Cell>
+                                        <Table.Cell>
+                                            <Button size="small" onClick={() => this.openEdit(t)} color="blue" style={{ marginRight: 8 }}>Edit</Button>
+                                            <Button size="small" negative onClick={() => this.deleteTask(t)}>Delete</Button>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table.Body>
+                        </Table>
+                    </div>
+                </div>
 
-                {/* Modal for creating/editing tasks */}
-                <Modal open={modalOpen} onClose={() => this.setState({ modalOpen: false })} size="small" style={{ borderRadius: 12 }}>
-                    <Modal.Header>{form.id ? 'Edit Task' : 'New Task'}</Modal.Header>
+                {/* Modal for creating/editing tasks - responsive and elegant */}
+                <Modal open={modalOpen} onClose={() => this.setState({ modalOpen: false })} size="small" style={{ borderRadius: 16, maxWidth: 480, margin: '0 auto' }}>
+                    <Modal.Header style={{ fontSize: '1.3rem', fontWeight: 700 }}>{form.id ? 'Edit Task' : 'New Task'}</Modal.Header>
                     <Modal.Content>
                         <Form>
                             <Form.Field required>
-                                <label>Title</label>
+                                <label style={{ fontWeight: 600 }}>Title</label>
                                 <Input
                                     value={form.title}
                                     maxLength={120}
                                     onChange={e => this.setState({ form: { ...this.state.form, title: e.target.value } })}
+                                    style={{ fontSize: '1rem' }}
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Description</label>
+                                <label style={{ fontWeight: 600 }}>Description</label>
                                 <TextArea
                                     value={form.description}
                                     maxLength={4000}
                                     onChange={e => this.setState({ form: { ...this.state.form, description: e.target.value } })}
+                                    style={{ fontSize: '1rem', minHeight: 80 }}
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Status</label>
+                                <label style={{ fontWeight: 600 }}>Status</label>
                                 <Dropdown
                                     selection
                                     options={statusOptions}
                                     value={form.status}
                                     onChange={(e, { value }) => this.setState({ form: { ...this.state.form, status: value } })}
+                                    style={{ minWidth: 120 }}
                                 />
                             </Form.Field>
                             <Form.Field>
-                                <label>Total Minutes</label>
+                                <label style={{ fontWeight: 600 }}>Total Minutes</label>
                                 <Input type="number" min={0} value={form.total_minutes}
                                     onChange={e => this.setState({ form: { ...this.state.form, total_minutes: e.target.value } })}
+                                    style={{ fontSize: '1rem' }}
                                 />
                             </Form.Field>
                         </Form>
-                        <Button onClick={this.suggest} icon labelPosition="left" color="yellow">
+                        <Button onClick={this.suggest} icon labelPosition="left" color="yellow" style={{ marginTop: 8 }}>
                             <Icon name="lightbulb" /> AI Suggest
                         </Button>
                         {/* Shows AI suggestion if available */}
                         {aiDraft && (
                             <div style={{ marginTop: 10 }}>
                                 <strong>Suggestion:</strong>
-                                <div style={{ whiteSpace: 'pre-wrap', border: '1px solid #ddd', padding: 8, borderRadius: 4, background: '#f9f9f9' }}>{aiDraft}</div>
-                                <Button size="small" onClick={() => this.setState({ form: { ...this.state.form, description: aiDraft } })} color="green">Use suggestion</Button>
+                                <div style={{ whiteSpace: 'pre-wrap', border: '1px solid #ddd', padding: 8, borderRadius: 8, background: '#f9f9f9', fontSize: '1rem' }}>{aiDraft}</div>
+                                <Button size="small" onClick={() => this.setState({ form: { ...this.state.form, description: aiDraft } })} color="green" style={{ marginTop: 8 }}>Use suggestion</Button>
                             </div>
                         )}
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button onClick={() => this.setState({ modalOpen: false })}>Cancel</Button>
-                        <Button primary onClick={this.saveTask} disabled={!isValid}>Save</Button>
+                        <Button onClick={() => this.setState({ modalOpen: false })} style={{ minWidth: 100 }}>Cancel</Button>
+                        <Button primary onClick={this.saveTask} disabled={!isValid} style={{ minWidth: 100 }}>Save</Button>
                     </Modal.Actions>
                 </Modal>
-            </>
+                {/* Responsive styles for Bootstrap */}
+                <style>{`
+                    @media (max-width: 200px) {
+                        .ui.container, .container-fluid {
+                            padding-left: 0 !important;
+                            padding-right: 0 !important;
+                        }
+                        .ui.table {
+                            font-size: 0.95rem !important;
+                        }
+                        .ui.modal {
+                            width: 98vw !important;
+                            left: 1vw !important;
+                        }
+                    }
+                `}</style>
+            </div>
         )
     }
 }
