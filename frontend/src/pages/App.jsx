@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Menu, Button, Icon, Modal, Form, TextArea, Input, Dropdown, Table, Loader, Message } from 'semantic-ui-react'
+import { Menu, Button, Icon, Modal, Form, TextArea, Input, Dropdown, Table, Loader, Message, Dimmer } from 'semantic-ui-react'
 import api from '../services/api'
 
 
@@ -213,7 +213,7 @@ class App extends Component
                     <Menu.Item header className="col-12 col-md-3 d-flex align-items-center" style={{ fontSize: '1.5rem', fontWeight: 700 }}>
                         <Icon name="tasks" color="blue" /> SprintSync
                     </Menu.Item>
-                    <Menu.Item className="col-12 col-md-6 d-flex align-items-center justify-content-center" style={{ fontSize: '1rem' }}>Welcome <strong>{user?.email}</strong></Menu.Item>
+                    <Menu.Item className="col-12 col-md-6 d-flex align-items-center justify-content-center" style={{ fontSize: '1rem' }}>Welcome &nbsp; <strong> {user?.email}</strong></Menu.Item>
                     <Menu.Menu position="right" className="col-12 col-md-3 d-flex justify-content-end">
                         <Menu.Item>
                             <Button onClick={this.openCreate} primary icon labelPosition="left" style={{ minWidth: 120 }}>
@@ -294,6 +294,30 @@ class App extends Component
                 <Modal open={modalOpen} onClose={() => this.setState({ modalOpen: false })} size="small" style={{ borderRadius: 16, maxWidth: 480, margin: '0 auto' }}>
                     <Modal.Header style={{ fontSize: '1.3rem', fontWeight: 700 }}>{form.id ? 'Edit Task' : 'New Task'}</Modal.Header>
                     <Modal.Content>
+                        {/* Loader spinner for modal actions (AI suggest, edit, create) */}
+                        {loading && (
+                            <div className="row justify-content-center">
+                                <div className="col-12 col-md-8">
+                                    loading hai bhai
+                                    <Dimmer active inverted>
+                                        <Loader indeterminate>Preparing Suggestion</Loader>
+                                    </Dimmer>
+                                </div>
+                            </div>
+                        )}
+                        {notification && (
+                            <div className="row justify-content-center">
+                                <div className="col-12 col-md-8">
+                                    <Message
+                                        positive={notification.type === 'success'}
+                                        negative={notification.type === 'error'}
+                                        content={notification.message}
+                                        onDismiss={() => this.setState({ notification: null })}
+                                        style={{ fontSize: '1rem', marginTop: 20 }}
+                                    />
+                                </div>
+                            </div>
+                        )}
                         <Form>
                             <Form.Field required>
                                 <label style={{ fontWeight: 600 }}>Title</label>
@@ -331,7 +355,7 @@ class App extends Component
                                 />
                             </Form.Field>
                         </Form>
-                        <Button onClick={this.suggest} icon labelPosition="left" color="yellow" style={{ marginTop: 8 }}>
+                        <Button onClick={this.suggest} icon labelPosition="left" color="yellow" style={{ marginTop: 8 }} disabled={loading}>
                             <Icon name="lightbulb" /> AI Suggest
                         </Button>
                         {/* Shows AI suggestion if available */}
@@ -344,8 +368,8 @@ class App extends Component
                         )}
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button onClick={() => this.setState({ modalOpen: false })} style={{ minWidth: 100 }}>Cancel</Button>
-                        <Button primary onClick={this.saveTask} disabled={!isValid} style={{ minWidth: 100 }}>Save</Button>
+                        <Button onClick={() => this.setState({ modalOpen: false })} style={{ minWidth: 100 }} disabled={loading}>Cancel</Button>
+                        <Button primary onClick={this.saveTask} disabled={!isValid || loading} style={{ minWidth: 100 }}>Save</Button>
                     </Modal.Actions>
                 </Modal>
                 {/* Responsive styles for Bootstrap */}
