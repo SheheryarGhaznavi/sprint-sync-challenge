@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import auth, users, tasks, ai
 from app.core.logging import registerLogging
@@ -11,6 +12,15 @@ app = FastAPI(title="Sprint Sync API", version="0.1.0")
 
 # Structured logging middleware
 registerLogging(app)
+
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 
