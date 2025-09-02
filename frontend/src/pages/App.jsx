@@ -38,7 +38,7 @@ class App extends Component
         this.setState({ loading: true, notification: null })
 
         try {
-            const { data } = await api.get('/tasks')
+            const { data } = await api.get('/tasks/')
 
             // Checks if API returned success and tasks array
             if (data && data.error === 0 && Array.isArray(data.data)) {
