@@ -1,0 +1,39 @@
+# SprintSync Backend Dockerfile
+# Purpose: Build and run the FastAPI backend with migrations and seeders
+
+# Use official Python 3.10 image
+FROM python:3.10-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy backend code
+COPY backend/ /app/
+
+# Install system dependencies for MySQL client and Alembic
+RUN apt-get update && apt-get install -y default-libmysqlclient-dev gcc && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Expose FastAPI port
+EXPOSE 8000
+
+# Run Alembic migrations and seed demo data before starting the server
+CMD alembic -c alembic.ini upgrade head && python3 app/run_seeder.py && uvicorn app.main:app --host 0.0.0.0 --port 8000 --app-dir .
+
+# Note: You must provide a .env file with your DB and OpenAI settings. See backend/app/config/database.py for required variables.
+# Example .env:
+# DB_HOST=db
+# DB_PORT=3306
+# DB_USER=sprintsync
+# DB_PASSWORD=sprintsync
+# DB_NAME=sprintsync
+# OPENAI_API_KEY=your-key
+# JWT_SECRET=changeme
+# JWT_ALGORITHM=HS256
+# JWT_EXPIRES_MINUTES=60
+
+# Database installation is NOT included in this container. Use a separate MySQL container or external DB.
+# For local dev, you can use Docker Compose to run MySQL and backend together.
