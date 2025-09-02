@@ -106,7 +106,7 @@ class App extends Component
                 ({ data } = await api.put(`/tasks/${form.id}`, payload))
             } else {
                 // Create new task
-                ({ data } = await api.post('/tasks', payload))
+                ({ data } = await api.post('/tasks/', payload))
             }
 
             // Checks if API returned error
