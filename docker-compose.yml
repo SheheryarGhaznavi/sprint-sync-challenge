@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: sprintsync-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: sprintsync
+      MYSQL_USER: sprintsync
+      MYSQL_PASSWORD: sprintsync
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: sprintsync-backend
+    restart: always
+    env_file:
+      - backend/app/.env
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: sprintsync
+      DB_PASSWORD: sprintsync
+      DB_NAME: sprintsync
+    command: >
+      sh -c "sleep 10 && alembic -c alembic.ini upgrade head && \
+             python3 app/run_seeder.py && \
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --app-dir ."
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: sprintsync-frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
