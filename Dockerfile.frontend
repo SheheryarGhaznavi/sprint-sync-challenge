@@ -1,0 +1,26 @@
+# SprintSync Frontend Dockerfile
+# Purpose: Build and serve the React frontend
+
+# Use official Node.js v18 image
+FROM node:18-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy frontend code
+COPY frontend/ /app/
+
+# Install frontend dependencies
+RUN npm install
+
+# Build the frontend for production
+RUN npm run build
+
+# Install static file server
+RUN npm install -g serve
+
+# Expose frontend port
+EXPOSE 5173
+
+# Serve the built frontend
+CMD serve -s dist -l 5173
