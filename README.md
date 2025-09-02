@@ -4,6 +4,13 @@ Sprint Sync Challenge is a project management tool designed to help teams track 
 
 ---
 
+## Live URLs
+- **Production Backend:** https://sprintsync-backend-production.up.railway.app/
+- **Production Frontend:** https://sprintsync-frontend-production.up.railway.app/
+- **Backend Swagger Docs:** https://sprintsync-backend-production.up.railway.app/docs
+
+---
+
 # Backend
 
 This folder contains the complete backend for the Sprint Sync Challenge project. Below is a detailed summary of its structure and main features:
@@ -83,6 +90,9 @@ This folder contains the complete backend for the Sprint Sync Challenge project.
 
 ## API URLs & Routes
 - **Base URL:** `http://localhost:8000` (default)
+- **Production Backend URL:** https://sprintsync-backend-production.up.railway.app/
+- **Production Frontend URL:** https://sprintsync-frontend-production.up.railway.app/
+- **Backend Swagger Docs:** https://sprintsync-backend-production.up.railway.app/docs
 - **Auth:**
   - `POST /auth/login` — Login with email and password
 - **Users:**
@@ -129,6 +139,17 @@ This folder contains the complete backend for the Sprint Sync Challenge project.
 3. Set environment variables in `.env` for production (see `app/config/`).
 4. Use a production ASGI server (e.g., gunicorn, uvicorn) and a process manager (e.g., systemd, supervisor).
 5. Configure firewall and reverse proxy (e.g., Nginx) for HTTPS and routing.
+
+## How to Run through Docker
+1. Make sure Docker and Docker Compose are installed on your server.
+2. Copy `.env.example` to `backend/app/.env` and fill in your secrets.
+3. Build and start all services:
+   ```bash
+   docker compose up --build
+   ```
+4. Backend API will be available at `http://localhost:8000` (or your server IP).
+5. Frontend will be available at `http://localhost:5173` (or your server IP).
+6. For production, you can deploy to platforms like Railway using the provided URLs above.
 
 ---
 
@@ -201,6 +222,16 @@ This folder contains the complete frontend for Sprint Sync Challenge. Below is a
    npm run preview
    ```
 3. Configure your server to proxy API requests to the backend.
+
+## How to Run through Docker
+1. Build frontend image:
+   ```bash
+   docker build -t sprintsync-frontend -f Dockerfile.frontend .
+   ```
+2. Run frontend container:
+   ```bash
+   docker run -d -p 5173:5173 sprintsync-frontend
+   ```
 
 ## Tools & Requirements
 - **Backend:** Python 3.10+, MySQL
